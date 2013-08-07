@@ -1,5 +1,6 @@
 display
 =======
+[![build status](https://secure.travis-ci.org/WebReflection/display.png)](http://travis-ci.org/WebReflection/display)
 
 a very simple object with some display info
 

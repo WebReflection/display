@@ -1,0 +1,17 @@
+{
+    "name": "display",
+    "description": "",
+    "version": "0.1.0",
+    "main": "display.js",
+    "ignore": [
+        "test",
+        ".jshintrc",
+        ".travis.yml",
+        "CHANGELOG.md",
+        "karma.conf.js",
+        "package.json"
+    ],
+    "devDependencies": {
+        "chai": "*"
+    }
+}

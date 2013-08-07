@@ -3,9 +3,11 @@
 ;(function (global) { function moduleDefinition(/*dependency*/) {
 
   var
+    abs = Math.abs,
     min = Math.min,
     Infinity = global.Infinity,
     screen = global.screen || Infinity,
+    matchMedia = window.matchMedia,
     addEventListener = 'addEventListener',
     documentElement = global.document.documentElement,
     handlers = {
@@ -20,6 +22,12 @@
         // throws otherwise
         handlers[type].push(callback);
       }
+    },
+    forEach = handlers.change.forEach || function (callback, self) {
+      // partial polyfill for this case only
+      for(var i = 0; i < this.length; i++) {
+        callback.call(self, this[i], i, this);
+      }
     }
   ;
 
@@ -27,23 +35,32 @@
     callback.call(display, display.width, display.height);
   }
 
-  function recalc() {
+  function recalc(e) {
     var
+      hasOrientation = 'orientation' in this,
+      landscape = hasOrientation ?
+        abs(this.orientation || 0) === 90 :
+        !!matchMedia && matchMedia("(orientation:landscape)")
+      ,
+      $width = 'width',
+      $height = 'height',
+      $availWidth = 'availWidth',
+      $availHeight = 'availHeight',
       width = min(
         global.innerWidth || documentElement.clientWidth,
-        screen.width || Infinity,
-        screen.availWidth || Infinity
+        screen[landscape ? $height : $width] || Infinity,
+        screen[landscape ? $availHeight : $availWidth] || Infinity
       ),
       height = min(
         global.innerHeight || documentElement.clientHeight,
-        screen.height || Infinity,
-        screen.availHeight || Infinity
+        screen[landscape ? $width : $height] || Infinity,
+        screen[landscape ? $availWidth : $availHeight] || Infinity
       )
     ;
     if (width !== display.width || height !== display.height) {
       display.width = width;
       display.height = height;
-      handlers.change.forEach(notify);
+      forEach.call(handlers.change, notify);
     }
   }
 
@@ -51,11 +68,15 @@
   if (addEventListener in global) {
     global[addEventListener]('orientationchange', recalc, true);
     global[addEventListener]('resize', recalc, true);
+    try {
+      // W3C proposal
+      screen[addEventListener]('orientationchange', recalc, true);
+    } catch(e) {}
   } else {
     global.attachEvent('onresize', recalc);
   }
 
-  recalc();
+  recalc.call(global);
 
   // calculated only once
   // works with MS Tablets/Phones too

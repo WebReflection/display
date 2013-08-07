@@ -45,11 +45,12 @@
 
   function recalc(e) {
     timer = 0;
+    alert([window.orientation, screen.orientation, matchMedia("(orientation:landscape)")]);
     var
       hasOrientation = 'orientation' in this,
       landscape = hasOrientation ?
         abs(this.orientation || 0) === 90 :
-        !!matchMedia && matchMedia("(orientation:landscape)")
+        !!matchMedia && matchMedia("(orientation:landscape)").matches
       ,
       width = min(
         global.innerWidth || documentElement.clientWidth,

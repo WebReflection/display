@@ -1,4 +1,4 @@
-/*! screen v0.1.0 - MIT license */
+/*! screen v0.1.1 - MIT license */
 /** easy way to obtain the full window size and some other prop */
 ;(function (global) { function moduleDefinition(/*dependency*/) {
 
@@ -28,33 +28,40 @@
       for(var i = 0; i < this.length; i++) {
         callback.call(self, this[i], i, this);
       }
-    }
+    },
+    timer
   ;
 
   function notify(callback) {
     callback.call(display, display.width, display.height);
   }
 
+  function delayed(e) {
+    if (timer) {
+      clearTimeout(timer);
+    }
+    timer = setTimeout(recalc, 300, e);
+  }
+
   function recalc(e) {
+    timer = 0;
     var
       hasOrientation = 'orientation' in this,
       landscape = hasOrientation ?
         abs(this.orientation || 0) === 90 :
         !!matchMedia && matchMedia("(orientation:landscape)")
       ,
-      $width = 'width',
-      $height = 'height',
-      $availWidth = 'availWidth',
-      $availHeight = 'availHeight',
       width = min(
         global.innerWidth || documentElement.clientWidth,
-        screen[landscape ? $height : $width] || Infinity,
-        screen[landscape ? $availHeight : $availWidth] || Infinity
+        (landscape ? screen.height : screen.width) || Infinity,
+        // funny behavior here in landscape ...
+        (landscape ? Infinity : screen.availWidth || Infinity)
       ),
       height = min(
         global.innerHeight || documentElement.clientHeight,
-        screen[landscape ? $width : $height] || Infinity,
-        screen[landscape ? $availWidth : $availHeight] || Infinity
+        (landscape ? screen.width : screen.height) || Infinity,
+        // funny behavior here in landscape ...
+        (landscape ? screen.availWidth || Infinity : Infinity)
       )
     ;
     if (width !== display.width || height !== display.height) {
@@ -66,11 +73,11 @@
 
   // 
   if (addEventListener in global) {
-    global[addEventListener]('orientationchange', recalc, true);
-    global[addEventListener]('resize', recalc, true);
+    global[addEventListener]('orientationchange', delayed, true);
+    global[addEventListener]('resize', delayed, true);
     try {
       // W3C proposal
-      screen[addEventListener]('orientationchange', recalc, true);
+      screen[addEventListener]('orientationchange', delayed, true);
     } catch(e) {}
   } else {
     global.attachEvent('onresize', recalc);

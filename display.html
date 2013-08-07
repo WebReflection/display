@@ -1,0 +1,43 @@
+<!doctype html>
+<html>
+  <head>
+    <title>display</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no"/>
+    <meta name="apple-mobile-web-app-capable" content="yes"/>
+    <meta names="apple-mobile-web-app-status-bar-style" content="black"/>
+    <meta http-equiv="content-language" content="en-US"/>
+    <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+    }
+    html {
+      background-color: #FF0;
+    }
+    body {
+      position: absolute;
+      top: 2px;
+      left: 2px;
+      background-color: #000;
+      color: #fff;
+      text-align: center;
+      font-family: sans-serif;
+    }
+    </style>
+    <script>document.write('<script src="display.js?_=' + Math.random() + '"><' + '/script>');</script>
+    <script>
+    function info() {
+      var div = document.getElementsByTagName('div')[0];
+      document.body.style.width = (display.width - 4) + 'px';
+      document.body.style.height = (display.height - 4) + 'px';
+      div.style.marginTop = Math.floor(display.height / 2 - 8) + 'px';
+      div.innerHTML = [
+        display.width, display.height
+      ].join(' x ');
+    }
+    display.on('change', info);
+    this.onload = info;
+    </script>
+  </head>
+  <body><div></div></body>
+</html>

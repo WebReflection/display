@@ -1,7 +1,7 @@
 {
     "name": "display",
     "description": "",
-    "version": "0.1.1",
+    "version": "0.1.2",
     "main": "display.js",
     "ignore": [
         "test",

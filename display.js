@@ -1,4 +1,4 @@
-/*! screen v0.1.1 - MIT license */
+/*! screen v0.1.2 - MIT license */
 /** easy way to obtain the full window size and some other prop */
 ;(function (global) { function moduleDefinition(/*dependency*/) {
 
@@ -10,6 +10,7 @@
     matchMedia = window.matchMedia,
     addEventListener = 'addEventListener',
     documentElement = global.document.documentElement,
+    shouldBeMobile  = /\bMobile\b/.test(navigator.userAgent),
     handlers = {
       change: []
     },
@@ -45,7 +46,6 @@
 
   function recalc(e) {
     timer = 0;
-    alert([window.orientation, screen.orientation, matchMedia("(orientation:landscape)")]);
     var
       hasOrientation = 'orientation' in this,
       landscape = hasOrientation ?
@@ -54,15 +54,15 @@
       ,
       width = min(
         global.innerWidth || documentElement.clientWidth,
-        (landscape ? screen.height : screen.width) || Infinity,
+        (shouldBeMobile && landscape ? screen.height : screen.width) || Infinity,
         // funny behavior here in landscape ...
-        (landscape ? Infinity : screen.availWidth || Infinity)
+        (shouldBeMobile && landscape ? Infinity : screen.availWidth || Infinity)
       ),
       height = min(
         global.innerHeight || documentElement.clientHeight,
-        (landscape ? screen.width : screen.height) || Infinity,
+        (shouldBeMobile && landscape ? screen.width : screen.height) || Infinity,
         // funny behavior here in landscape ...
-        (landscape ? screen.availWidth || Infinity : Infinity)
+        (shouldBeMobile && landscape ? screen.availWidth || Infinity : Infinity)
       )
     ;
     if (width !== display.width || height !== display.height) {

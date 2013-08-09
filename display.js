@@ -1,9 +1,11 @@
-/*! screen v0.1.2 - MIT license */
+/*! screen v0.1.3 - MIT license */
 /** easy way to obtain the full window size and some other prop */
 ;(function (global) { function moduleDefinition(/*dependency*/) {
 
   var
+    Math = global.Math,
     abs = Math.abs,
+    max = Math.max,
     min = Math.min,
     Infinity = global.Infinity,
     screen = global.screen || Infinity,
@@ -52,19 +54,22 @@
         abs(this.orientation || 0) === 90 :
         !!matchMedia && matchMedia("(orientation:landscape)").matches
       ,
+      swidth = screen.width,    // TODO: verify screen.availWidth in some device
+      sheight = screen.height,  // only if width/height not working as expected
       width = min(
         global.innerWidth || documentElement.clientWidth,
-        (shouldBeMobile && landscape ? screen.height : screen.width) || Infinity,
-        // funny behavior here in landscape ...
-        (shouldBeMobile && landscape ? Infinity : screen.availWidth || Infinity)
+        // Android flips screen width and height size in landscape
+        // Find biggest dimension in landscape otherwise width is OK
+        (shouldBeMobile && landscape ? max(swidth, sheight) : swidth) || Infinity
       ),
       height = min(
         global.innerHeight || documentElement.clientHeight,
-        (shouldBeMobile && landscape ? screen.width : screen.height) || Infinity,
-        // funny behavior here in landscape ...
-        (shouldBeMobile && landscape ? screen.availWidth || Infinity : Infinity)
+        // Android flips screen width and height size in landscape
+        // Find biggest dimension in landscape otherwise width is OK
+        (shouldBeMobile && landscape ? min(swidth, sheight) : sheight) || Infinity
       )
     ;
+
     if (width !== display.width || height !== display.height) {
       display.width = width;
       display.height = height;

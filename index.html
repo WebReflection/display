@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset='utf-8' />
+    <meta http-equiv="X-UA-Compatible" content="chrome=1" />
+    <meta name="description" content="Display : a simple cross browser way to obtain some display info" />
+
+    <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
+
+    <title>Display</title>
+  </head>
+
+  <body>
+
+    <!-- HEADER -->
+    <div id="header_wrap" class="outer">
+        <header class="inner">
+          <a id="forkme_banner" href="https://github.com/WebReflection/display">View on GitHub</a>
+
+          <h1 id="project_title">Display</h1>
+          <h2 id="project_tagline">a simple cross browser way to obtain some display info</h2>
+
+            <section id="downloads">
+              <a class="zip_download_link" href="https://github.com/WebReflection/display/zipball/master">Download this project as a .zip file</a>
+              <a class="tar_download_link" href="https://github.com/WebReflection/display/tarball/master">Download this project as a tar.gz file</a>
+            </section>
+        </header>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div id="main_content_wrap" class="outer">
+      <section id="main_content" class="inner">
+        <h1>
+<a name="display" class="anchor" href="#display"><span class="octicon octicon-link"></span></a>display</h1>
+
+<p><a href="http://travis-ci.org/WebReflection/display"><img src="https://secure.travis-ci.org/WebReflection/display.png" alt="build status"></a></p>
+
+<p>a very simple object with some display info</p>
+
+<p>version <strong>alpha</strong></p>
+
+<h3>
+<a name="api" class="anchor" href="#api"><span class="octicon octicon-link"></span></a>API</h3>
+
+<ul>
+<li>
+<code>.width:Number</code> the current device width in pixels</li>
+<li>
+<code>.height:Number</code> the current device height in pixels</li>
+<li>
+<code>.ratio:Number</code> the current device ratio (1 === 100%)</li>
+<li>
+<code>.on(type, callback)</code> a basic mechanism to add a listener. Right now accepts only <code>change</code> type</li>
+</ul><p>That's pretty much it for now.</p>
+
+<p>The change event should be fired only if something really change on the screen.
+Most likely this will fire on browsers window resizes or devices orientation change.</p>
+
+<div class="highlight"><pre><span class="nx">display</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s1">'change'</span><span class="p">,</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">width</span><span class="p">,</span> <span class="nx">height</span><span class="p">)</span> <span class="p">{</span>
+  <span class="nx">alert</span><span class="p">(</span><span class="s1">'new size! '</span> <span class="o">+</span> <span class="p">[</span><span class="nx">width</span><span class="p">,</span> <span class="nx">height</span><span class="p">]);</span>
+<span class="p">});</span>
+<span class="nx">alert</span><span class="p">(</span><span class="s1">'current size: '</span> <span class="o">+</span> <span class="p">[</span><span class="nx">display</span><span class="p">.</span><span class="nx">width</span><span class="p">,</span> <span class="nx">display</span><span class="p">.</span><span class="nx">height</span><span class="p">]);</span>
+</pre></div>
+
+<p>This API is very simple right now on purpose. I need to understand when/why/where it needs to be improved, specially on mobile.</p>
+      </section>
+    </div>
+
+    <!-- FOOTER  -->
+    <div id="footer_wrap" class="outer">
+      <footer class="inner">
+        <p class="copyright">Display maintained by <a href="https://github.com/WebReflection">WebReflection</a></p>
+        <p>Published with <a href="http://pages.github.com">GitHub Pages</a></p>
+      </footer>
+    </div>
+
+    
+
+  </body>
+</html>

@@ -14,16 +14,15 @@
     </style>
     <script src="https://raw.github.com/WebReflection/display/master/display.js"></script>
     <script>
-    this.onload = function () {
-      function info() {
-        document.body.innerHTML = [
-          'width: ' + display.width,
-          'height: ' + display.height,
-          'ratio: ' + display.ratio
-        ].join('<br/>');
-      }
-      display.on('change', info);
-    };
+    function info() {
+      document.body.innerHTML = [
+        'width: ' + display.width,
+        'height: ' + display.height,
+        'ratio: ' + display.ratio
+      ].join('<br/>');
+    }
+    display.on('change', info);
+    this.onload = info;
     </script>
     <title>Display</title>
   </head>

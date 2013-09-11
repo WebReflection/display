@@ -56,8 +56,19 @@
       ctx.fill();
       canvas.style.cssText = ['width:', 'px;height:', 'px;'].join(vSize);
     }
+    function preventDefault(e) {
+      e.preventDefault();
+    }
     display.on('change', info);
     this.onload = info;
+    try {
+      document.addEventListener('touchstart', preventDefault);
+      document.addEventListener('mousedown', preventDefault);
+      document.addEventListener('mousemove', preventDefault);
+      document.addEventListener('scroll', preventDefault);
+      document.addEventListener('MSPointerDown', preventDefault);
+      document.addEventListener('pointerdown', preventDefault);
+    } catch(IElt9) {}
     </script>
   </head>
   <body><div></div></body>

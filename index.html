@@ -56,19 +56,27 @@
       ctx.fill();
       canvas.style.cssText = ['width:', 'px;height:', 'px;'].join(vSize);
     }
-    function preventDefault(e) {
+    function blockIt(e) {
       e.preventDefault();
+      e.stopPropagation();
     }
     display.on('change', info);
     this.onload = info;
     try {
-      document.documentElement.addEventListener('touchstart', preventDefault, true);
-      document.documentElement.addEventListener('mousedown', preventDefault, true);
-      document.documentElement.addEventListener('mousemove', preventDefault, true);
-      document.documentElement.addEventListener('scroll', preventDefault, true);
-      document.documentElement.addEventListener('mousewheel', preventDefault, true);
-      document.documentElement.addEventListener('MSPointerDown', preventDefault, true);
-      document.documentElement.addEventListener('pointerdown', preventDefault, true);
+      for(var
+        e = [
+          'touchstart',
+          'touchmove',
+          'mousedown',
+          'mousemove',
+          'scroll',
+          'mousewheel',
+          'MSPointerDown',
+          'pointerdown'
+        ],
+        i = e.length; i--;
+        document.documentElement.addEventListener(e[i], blockIt, true)
+      );
     } catch(IElt9) {}
     </script>
   </head>

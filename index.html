@@ -62,12 +62,13 @@
     display.on('change', info);
     this.onload = info;
     try {
-      document.addEventListener('touchstart', preventDefault);
-      document.addEventListener('mousedown', preventDefault);
-      document.addEventListener('mousemove', preventDefault);
-      document.addEventListener('scroll', preventDefault);
-      document.addEventListener('MSPointerDown', preventDefault);
-      document.addEventListener('pointerdown', preventDefault);
+      document.documentElement.addEventListener('touchstart', preventDefault, true);
+      document.documentElement.addEventListener('mousedown', preventDefault, true);
+      document.documentElement.addEventListener('mousemove', preventDefault, true);
+      document.documentElement.addEventListener('scroll', preventDefault, true);
+      document.documentElement.addEventListener('wheel', preventDefault, true);
+      document.documentElement.addEventListener('MSPointerDown', preventDefault, true);
+      document.documentElement.addEventListener('pointerdown', preventDefault, true);
     } catch(IElt9) {}
     </script>
   </head>

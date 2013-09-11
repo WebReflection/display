@@ -57,6 +57,7 @@
       canvas.style.cssText = ['width:', 'px;height:', 'px;'].join(vSize);
     }
     function preventDefault(e) {
+      console.log(e.type);
       e.preventDefault();
     }
     display.on('change', info);
@@ -66,7 +67,7 @@
       document.documentElement.addEventListener('mousedown', preventDefault, true);
       document.documentElement.addEventListener('mousemove', preventDefault, true);
       document.documentElement.addEventListener('scroll', preventDefault, true);
-      document.documentElement.addEventListener('wheel', preventDefault, true);
+      document.documentElement.addEventListener('mousewheel', preventDefault, true);
       document.documentElement.addEventListener('MSPointerDown', preventDefault, true);
       document.documentElement.addEventListener('pointerdown', preventDefault, true);
     } catch(IElt9) {}

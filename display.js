@@ -49,6 +49,7 @@
   function recalc(e) {
     timer = 0;
     var
+      devicePixelRatio = global.devicePixelRatio || 1,
       hasOrientation = 'orientation' in this,
       landscape = hasOrientation ?
         abs(this.orientation || 0) === 90 :
@@ -58,15 +59,21 @@
       sheight = screen.height,  // only if width/height not working as expected
       width = min(
         global.innerWidth || documentElement.clientWidth,
-        // Android flips screen width and height size in landscape
-        // Find biggest dimension in landscape otherwise width is OK
-        (shouldBeMobile && landscape ? max(swidth, sheight) : swidth) || Infinity
+        // some Android has 0.75 ratio
+        devicePixelRatio < 1 ? Infinity : (
+          // Android flips screen width and height size in landscape
+          // Find biggest dimension in landscape otherwise width is OK
+          (shouldBeMobile && landscape ? max(swidth, sheight) : swidth) || Infinity
+        )
       ),
       height = min(
         global.innerHeight || documentElement.clientHeight,
-        // Android flips screen width and height size in landscape
-        // Find biggest dimension in landscape otherwise width is OK
-        (shouldBeMobile && landscape ? min(swidth, sheight) : sheight) || Infinity
+        // some Android has 0.75 ratio
+        devicePixelRatio < 1 ? Infinity : (
+          // Android flips screen width and height size in landscape
+          // Find biggest dimension in landscape otherwise width is OK
+          (shouldBeMobile && landscape ? min(swidth, sheight) : sheight) || Infinity
+        )
       )
     ;
 

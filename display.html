@@ -32,7 +32,7 @@
       document.body.style.height = (display.height - 4) + 'px';
       div.style.marginTop = Math.floor(display.height / 2 - 8) + 'px';
       div.innerHTML = [
-        display.width, display.height
+        display.width, display.height, display.ratio
       ].join(' x ');
     }
     display.on('change', info);

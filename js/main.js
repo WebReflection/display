@@ -1,6 +1,7 @@
-/*! display v0.1.3 - MIT license */
+
+/*! display v0.1.5 - MIT license */
 /** easy way to obtain the full window size and some other prop */
-;(function (global) { function moduleDefinition(/*dependency*/) {
+var display = function (global) {
 
   var
     Math = global.Math,
@@ -42,8 +43,11 @@
   function delayed(e) {
     if (timer) {
       clearTimeout(timer);
+      timer = 0;
     }
-    timer = setTimeout(recalc, 300, e);
+    // ignore this event in stand alone with keyboard
+    return(navigator.standalone && innerHeight < 300) ||
+          (timer = setTimeout(recalc, 300, e));
   }
 
   function recalc(e) {
@@ -108,13 +112,4 @@
 
 // ---------------------------------------------------------------------------
 
-} if (typeof exports === 'object') {
-    // node export
-    module.exports = moduleDefinition(/*require('dependency')*/);
-} else if (typeof define === 'function' && define.amd) {
-    // amd anonymous module registration
-    define([/*'dependency'*/], moduleDefinition);
-} else {
-    // browser global
-    global.display = moduleDefinition(/*global.dependency*/);
-}}(this));
+}(window);

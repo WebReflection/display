@@ -1,4 +1,4 @@
-/*! display v0.1.5 - MIT license */
+/*! display v0.1.6 - MIT license */
 /** easy way to obtain the full window size and some other prop */
 ;(function (global) { function moduleDefinition(/*dependency*/) {
 
@@ -44,8 +44,8 @@
       clearTimeout(timer);
       timer = 0;
     }
-    // ignore this event in stand alone with keyboard
-    return(navigator.standalone && innerHeight < 300) ||
+    // ignore this event if keyboard comes up (300 should be enough)
+    return(innerHeight < 300) ||
           (timer = setTimeout(recalc, 300, e));
   }
 

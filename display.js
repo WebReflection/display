@@ -1,4 +1,4 @@
-/*! display v0.1.6 - MIT license */
+/*! display v0.1.7 - MIT license */
 /** easy way to obtain the full window size and some other prop */
 ;(function (global) { function moduleDefinition(/*dependency*/) {
 
@@ -9,7 +9,7 @@
     min = Math.min,
     Infinity = global.Infinity,
     screen = global.screen || Infinity,
-    matchMedia = window.matchMedia,
+    matchMedia = global.matchMedia,
     addEventListener = 'addEventListener',
     documentElement = global.document.documentElement,
     shouldBeMobile  = /\bMobile\b/.test(navigator.userAgent),
@@ -45,19 +45,21 @@
       timer = 0;
     }
     // ignore this event if keyboard comes up (300 should be enough)
-    return(innerHeight < 300) ||
+    return(!isLandscape() && innerHeight < 300) ||
           (timer = setTimeout(recalc, 300, e));
+  }
+
+  function isLandscape() {
+    return 'orientation' in global ?
+      abs(global.orientation || 0) === 90 :
+      !!matchMedia && matchMedia("(orientation:landscape)").matches;
   }
 
   function recalc(e) {
     timer = 0;
     var
       devicePixelRatio = global.devicePixelRatio || 1,
-      hasOrientation = 'orientation' in this,
-      landscape = hasOrientation ?
-        abs(this.orientation || 0) === 90 :
-        !!matchMedia && matchMedia("(orientation:landscape)").matches
-      ,
+      landscape = isLandscape(),
       swidth = screen.width,    // TODO: verify screen.availWidth in some device
       sheight = screen.height,  // only if width/height not working as expected
       width = min(

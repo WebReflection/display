@@ -34,6 +34,9 @@
       div.innerHTML = [
         display.width, display.height, display.ratio
       ].join(' x ');
+      document.body.onclick = function () {
+        display.full(!display.fullScreen);
+      };
     }
     display.on('change', info);
     this.onload = info;

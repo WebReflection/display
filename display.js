@@ -11,8 +11,18 @@
     screen = global.screen || Infinity,
     matchMedia = global.matchMedia,
     addEventListener = 'addEventListener',
-    documentElement = global.document.documentElement,
+    document = global.document,
+    documentElement = document.documentElement,
     shouldBeMobile  = /\bMobile\b/.test(navigator.userAgent),
+    rFS = documentElement.requestFullscreen ||
+          documentElement.mozRequestFullScreen ||
+          documentElement.webkitRequestFullScreen
+    ,
+    cFS = document.exitFullscreen ||
+          document.cancelFullscreen ||
+          document.mozCancelFullScreen ||
+          document.webkitExitFullscreen
+    ,
     handlers = {
       change: []
     },
@@ -20,6 +30,22 @@
       width: 0,
       height: 0,
       ratio: 0,
+      full: rFS && cFS ? function (onOrOff) {
+        var
+          isFS =  document.fullscreenElement ||
+                  document.mozFullScreenElement ||
+                  document.webkitFullscreenElement
+        ;
+        if (onOrOff || onOrOff == null) {
+          display.fullScreen = true;
+          if (!isFS) {
+            rFS.call(documentElement);
+          }
+        } else if (isFS) {
+          display.fullScreen = false;
+          cFS.call(document);
+        }
+      } : Object,
       on: function (type, callback) {
         // right now only change is supported
         // throws otherwise

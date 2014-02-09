@@ -89,7 +89,8 @@
       swidth = screen.width,    // TODO: verify screen.availWidth in some device
       sheight = screen.height,  // only if width/height not working as expected
       width = min(
-        global.innerWidth || documentElement.clientWidth,
+        global.innerWidth || Infinity,
+        documentElement.clientWidth || Infinity,
         // some Android has 0.75 ratio
         devicePixelRatio < 1 ? Infinity : (
           // Android flips screen width and height size in landscape
@@ -98,7 +99,8 @@
         )
       ),
       height = min(
-        global.innerHeight || documentElement.clientHeight,
+        global.innerHeight || Infinity,
+        documentElement.clientHeight || Infinity,
         // some Android has 0.75 ratio
         devicePixelRatio < 1 ? Infinity : (
           // Android flips screen width and height size in landscape

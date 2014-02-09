@@ -1,7 +1,6 @@
-
-/*! display v0.1.5 - MIT license */
+/*! display v0.1.7 - MIT license */
 /** easy way to obtain the full window size and some other prop */
-var display = function (global) {
+;(function (global) { function moduleDefinition(/*dependency*/) {
 
   var
     Math = global.Math,
@@ -10,10 +9,20 @@ var display = function (global) {
     min = Math.min,
     Infinity = global.Infinity,
     screen = global.screen || Infinity,
-    matchMedia = window.matchMedia,
+    matchMedia = global.matchMedia,
     addEventListener = 'addEventListener',
-    documentElement = global.document.documentElement,
+    document = global.document,
+    documentElement = document.documentElement,
     shouldBeMobile  = /\bMobile\b/.test(navigator.userAgent),
+    rFS = documentElement.requestFullscreen ||
+          documentElement.mozRequestFullScreen ||
+          documentElement.webkitRequestFullScreen
+    ,
+    cFS = document.exitFullscreen ||
+          document.cancelFullscreen ||
+          document.mozCancelFullScreen ||
+          document.webkitExitFullscreen
+    ,
     handlers = {
       change: []
     },
@@ -21,6 +30,22 @@ var display = function (global) {
       width: 0,
       height: 0,
       ratio: 0,
+      full: rFS && cFS ? function (onOrOff) {
+        var
+          isFS =  document.fullscreenElement ||
+                  document.mozFullScreenElement ||
+                  document.webkitFullscreenElement
+        ;
+        if (onOrOff || onOrOff == null) {
+          display.fullScreen = true;
+          if (!isFS) {
+            rFS.call(documentElement);
+          }
+        } else if (isFS) {
+          display.fullScreen = false;
+          cFS.call(document);
+        }
+      } : Object,
       on: function (type, callback) {
         // right now only change is supported
         // throws otherwise
@@ -45,24 +70,27 @@ var display = function (global) {
       clearTimeout(timer);
       timer = 0;
     }
-    // ignore this event in stand alone with keyboard
-    return(navigator.standalone && innerHeight < 300) ||
+    // ignore this event if keyboard comes up (300 should be enough)
+    return(!isLandscape() && innerHeight < 300) ||
           (timer = setTimeout(recalc, 300, e));
+  }
+
+  function isLandscape() {
+    return 'orientation' in global ?
+      abs(global.orientation || 0) === 90 :
+      !!matchMedia && matchMedia("(orientation:landscape)").matches;
   }
 
   function recalc(e) {
     timer = 0;
     var
       devicePixelRatio = global.devicePixelRatio || 1,
-      hasOrientation = 'orientation' in this,
-      landscape = hasOrientation ?
-        abs(this.orientation || 0) === 90 :
-        !!matchMedia && matchMedia("(orientation:landscape)").matches
-      ,
+      landscape = isLandscape(),
       swidth = screen.width,    // TODO: verify screen.availWidth in some device
       sheight = screen.height,  // only if width/height not working as expected
       width = min(
-        global.innerWidth || documentElement.clientWidth,
+        global.innerWidth || Infinity,
+        documentElement.clientWidth || Infinity,
         // some Android has 0.75 ratio
         devicePixelRatio < 1 ? Infinity : (
           // Android flips screen width and height size in landscape
@@ -71,7 +99,8 @@ var display = function (global) {
         )
       ),
       height = min(
-        global.innerHeight || documentElement.clientHeight,
+        global.innerHeight || Infinity,
+        documentElement.clientHeight || Infinity,
         // some Android has 0.75 ratio
         devicePixelRatio < 1 ? Infinity : (
           // Android flips screen width and height size in landscape
@@ -112,4 +141,13 @@ var display = function (global) {
 
 // ---------------------------------------------------------------------------
 
-}(window);
+} if (typeof exports === 'object') {
+    // node export
+    module.exports = moduleDefinition(/*require('dependency')*/);
+} else if (typeof define === 'function' && define.amd) {
+    // amd anonymous module registration
+    define([/*'dependency'*/], moduleDefinition);
+} else {
+    // browser global
+    global.display = moduleDefinition(/*global.dependency*/);
+}}(this));

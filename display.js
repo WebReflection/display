@@ -1,4 +1,4 @@
-/*! display v0.1.9 - MIT license */
+/*! (C) Andrea Giammarchi v0.1.9 - MIT license */
 /** easy way to obtain the full window size and some other prop */
 ;(function (global) { function moduleDefinition(/*dependency*/) {
 
